@@ -33,13 +33,20 @@ A simulação utiliza uma malha 2D onde cada célula possui uma temperatura inic
 
 **Equação de difusão discreta:**
 
-T[i][j]_novo = T[i][j] + α * Δt * (T[i-1][j] + T[i+1][j] + T[i][j-1] + T[i][j+1] - 4*T[i][j])
+## Equação de Difusão Térmica
 
+A simulação utiliza a seguinte equação de diferenças finitas:
 
-Onde:
-- `T[i][j]` é a temperatura na célula (i, j)
-- `α` é o coeficiente de difusão térmica
-- `Δt` é o passo de tempo da simulação
+$$
+T[i][j]_{\text{novo}} = T[i][j] + \alpha \cdot \Delta t \cdot (T[i-1][j] + T[i+1][j] + T[i][j-1] + T[i][j+1] - 4 \cdot T[i][j])
+$$
+
+### Onde:
+
+- **`T[i][j]`** - Temperatura na célula (i, j)
+- **$\alpha$** - Coeficiente de difusão térmica  
+- **$\Delta t$** - Passo de tempo da simulação
+- **$T[i][j]_{\text{novo}}$** - Nova temperatura após um passo de tempo
 
 ## 🎯 Objetivos
 
@@ -120,28 +127,23 @@ A malha é dividida entre múltiplos processos ou máquinas que se comunicam via
 projeto_SistemasDistribuidos/
 │
 ├── README.md # Documentação do projeto
-├── requirements.txt # Dependências Python
 │
-├── sequencial/
-│ └── heat_diffusion_seq.py # Implementação sequencial
+├── source/
+│   ├── sequencial/
+│   │   └── heat_diffusion_seq.py # Implementação sequencial
+│   ├── paralelo/
+│   │   └── heat_diffusion_parallel.py # Implementação com threads
+│   └── distribuido/
+│       ├── heat_diffusion_master.py # Processo mestre (coordenador)
+│       └── heat_diffusion_worker.py # Processo worker (trabalhador)
 │
-├── paralelo/
-│ └── heat_diffusion_parallel.py # Implementação com threads
-│
-├── distribuido/
-│ ├── heat_diffusion_master.py # Processo mestre (coordenador)
-│ └── heat_diffusion_worker.py # Processo worker (trabalhador)
-│
-├── utils/
-│ ├── visualization.py # Funções de visualização
-│ └── benchmark.py # Scripts de medição de desempenho
-│
-├── results/
+├── tests/
 │ ├── graphs/ # Gráficos de desempenho
-│ └── tables/ # Tabelas comparativas
+│ └── tables/ # Tabelas comparativas em json
+| 
 │
-└── docs/
-└── apresentacao.pdf # Apresentação do trabalho
+└── reports/
+   └── apresentacao.pdf # Apresentação do trabalho
 
 
 ## 🚀 Como Executar
