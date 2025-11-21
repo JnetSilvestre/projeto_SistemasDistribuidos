@@ -257,45 +257,58 @@ class HeatDiffusionWorker:
         return u_result, max_diff
     
     def start(self):
-        """Inicia worker e aguarda conexão do master."""
+        """Inicia worker e aguarda múltiplas conexões do master."""
         server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         server_socket.bind(('0.0.0.0', self.port))
-        server_socket.listen(1)
-        
-        print(f"Worker aguardando conexão na porta {self.port}...")
-        
-        client_socket, addr = server_socket.accept()
-        print(f"Conectado ao master {addr}")
-        
-        # Recebe configuração
-        self.config = self._receive_data(client_socket)
-        print(f"Worker {self.config['worker_id']} configurado: linhas {self.config['start_row']}-{self.config['end_row']}")
-        
-        # Loop de trabalho
+        server_socket.listen(5)  # Permite fila de conexões
+    
+        print(f"Worker aguardando conexões na porta {self.port}...")
+    
+        # Loop para aceitar múltiplas conexões
         while True:
-            data = self._receive_data(client_socket)
+            try:
+                client_socket, addr = server_socket.accept()
+                print(f"Nova conexão do master {addr}")
             
-            if data is None or data['type'] == 'stop':
-                print("Worker recebeu sinal de parada")
+                # Recebe configuração
+                self.config = self._receive_data(client_socket)
+            
+                if self.config is None:
+                    break
+                
+                print(f"Worker {self.config['worker_id']} configurado: linhas {self.config['start_row']}-{self.config['end_row']}")
+            
+                # Loop de trabalho para esta conexão
+                while True:
+                    data = self._receive_data(client_socket)
+                
+                    if data is None or data['type'] == 'stop':
+                        print("Worker finalizou benchmark")
+                        break
+                
+                    if data['type'] == 'work':
+                        u_data = data['u_data']
+                        u_computed, max_diff = self._compute_work(u_data)
+                    
+                        result = {
+                            'u_computed': u_computed,
+                            'max_diff': max_diff
+                        }
+                        self._send_data(client_socket, result)
+            
+                client_socket.close()
+                print("Conexão fechada. Aguardando próximo benchmark...\n")
+            
+            except KeyboardInterrupt:
+                print("\nWorker sendo encerrado...")
                 break
-            
-            if data['type'] == 'work':
-                u_data = data['u_data']
-                
-                # Processa trabalho
-                u_computed, max_diff = self._compute_work(u_data)
-                
-                # Envia resultado
-                result = {
-                    'u_computed': u_computed,
-                    'max_diff': max_diff
-                }
-                self._send_data(client_socket, result)
-        
-        client_socket.close()
+            except Exception as e:
+                print(f"Erro no worker: {e}")
+                continue
+    
         server_socket.close()
-        print("Worker encerrado")
+        print("Worker encerrado completamente")
 
 
 def benchmark_distributed(grid_sizes: list = [50, 100, 200],
