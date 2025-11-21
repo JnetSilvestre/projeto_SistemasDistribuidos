@@ -192,8 +192,3 @@ if __name__ == "__main__":
     print("\n" + "=" * 60)
     print("Resultados salvos em 'sequential_results.json'")
     print("=" * 60)
-    
-    # Visualização de exemplo
-    solver = HeatDiffusion2DSequential(grid_size=200)
-    solver.solve()
-    solver.visualize('heat_diffusion_sequential.png')
