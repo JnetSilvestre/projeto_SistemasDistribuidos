@@ -1,4 +1,0 @@
-Tamanho da Malha,Sequencial (s),Paralelo 1T (s),Speedup 1T,Paralelo 2T (s),Speedup 2T,Paralelo 4T (s),Speedup 4T,Paralelo 8T (s),Speedup 8T,Distribuído 1W (s),Speedup 1W,Distribuído 2W (s),Speedup 2W,Distribuído 4W (s),Speedup 4W
-20x20,0.5027,8.9509,1.00x,9.5164,0.94x,11.8532,0.76x,16.9482,0.53x,0.9246,1.00x,0.6505,1.42x,0.7468,1.24x
-50x50,10.0678,58.3882,1.00x,61.0842,0.96x,64.0904,0.91x,70.0695,0.83x,23.3910,1.00x,12.3436,1.89x,8.6847,2.69x
-100x100,109.0307,259.2800,1.00x,326.6506,0.79x,335.2887,0.77x,346.2879,0.75x,126.9249,1.00x,75.3796,1.68x,44.8086,2.83x
