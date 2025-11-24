@@ -257,50 +257,63 @@ class HeatDiffusionWorker:
         return u_result, max_diff
     
     def start(self):
-        """Inicia worker e aguarda conexão do master."""
+        """Inicia worker e aguarda múltiplas conexões do master."""
         server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         server_socket.bind(('0.0.0.0', self.port))
-        server_socket.listen(1)
+        server_socket.listen(5)  # Permite fila de conexões
         
-        print(f"Worker aguardando conexão na porta {self.port}...")
+        print(f"Worker aguardando conexões na porta {self.port}...")
         
-        client_socket, addr = server_socket.accept()
-        print(f"Conectado ao master {addr}")
-        
-        # Recebe configuração
-        self.config = self._receive_data(client_socket)
-        print(f"Worker {self.config['worker_id']} configurado: linhas {self.config['start_row']}-{self.config['end_row']}")
-        
-        # Loop de trabalho
+        # Loop para aceitar múltiplas conexões
         while True:
-            data = self._receive_data(client_socket)
-            
-            if data is None or data['type'] == 'stop':
-                print("Worker recebeu sinal de parada")
+            try:
+                client_socket, addr = server_socket.accept()
+                print(f"Nova conexão do master {addr}")
+                
+                # Recebe configuração
+                self.config = self._receive_data(client_socket)
+                
+                if self.config is None:
+                    break
+                    
+                print(f"Worker {self.config['worker_id']} configurado: linhas {self.config['start_row']}-{self.config['end_row']}")
+                
+                # Loop de trabalho para esta conexão
+                while True:
+                    data = self._receive_data(client_socket)
+                    
+                    if data is None or data['type'] == 'stop':
+                        print("Worker finalizou benchmark")
+                        break
+                    
+                    if data['type'] == 'work':
+                        u_data = data['u_data']
+                        u_computed, max_diff = self._compute_work(u_data)
+                        
+                        result = {
+                            'u_computed': u_computed,
+                            'max_diff': max_diff
+                        }
+                        self._send_data(client_socket, result)
+                
+                client_socket.close()
+                print("Conexão fechada. Aguardando próximo benchmark...\n")
+                
+            except KeyboardInterrupt:
+                print("\nWorker sendo encerrado...")
                 break
-            
-            if data['type'] == 'work':
-                u_data = data['u_data']
-                
-                # Processa trabalho
-                u_computed, max_diff = self._compute_work(u_data)
-                
-                # Envia resultado
-                result = {
-                    'u_computed': u_computed,
-                    'max_diff': max_diff
-                }
-                self._send_data(client_socket, result)
+            except Exception as e:
+                print(f"Erro no worker: {e}")
+                continue
         
-        client_socket.close()
         server_socket.close()
-        print("Worker encerrado")
+        print("Worker encerrado completamente")
 
 
-def benchmark_distributed(grid_sizes: list = [50, 100, 200],
+def benchmark_distributed(grid_sizes: list = [20, 50, 100],
                          worker_counts: list = [1, 2, 4],
-                         repetitions: int = 3) -> Dict:
+                         repetitions: int = 5) -> Dict:
     """
     Benchmark versão distribuída.
     NOTA: Requer workers rodando em máquinas/portas separadas.
@@ -338,8 +351,8 @@ def benchmark_distributed(grid_sizes: list = [50, 100, 200],
                     master = HeatDiffusionMaster(
                         grid_size=grid_size,
                         alpha=0.01,
-                        max_iterations=10000,
-                        tolerance=1e-4,
+                        max_iterations=5000,
+                        tolerance=1e-6,
                         worker_hosts=worker_hosts
                     )
                     
@@ -388,9 +401,9 @@ if __name__ == "__main__":
     elif args.benchmark:
         # Modo benchmark
         results = benchmark_distributed(
-            grid_sizes=[50, 100, 200],
+            grid_sizes=[20, 50, 100],
             worker_counts=[1, 2, 4],
-            repetitions=3
+            repetitions=5
         )
         
         with open('distributed_results.json', 'w') as f:
