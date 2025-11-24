@@ -1,7 +1,6 @@
 # 🔥 Simulação de Difusão de Calor - Sistemas Distribuídos
 
 [![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://www.python.org/downloads/)
-[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![UTFPR](https://img.shields.io/badge/UTFPR-EC48A-red.svg)](http://www.utfpr.edu.br/)
 
 > Implementação e análise comparativa de algoritmos de difusão de calor em malhas 2D utilizando abordagens sequencial, paralela (threads) e distribuída (sockets).
@@ -309,7 +308,7 @@ Este projeto foi desenvolvido por alunos de Engenharia da Computação da UTFPR 
 
 **EC48A - Sistemas Distribuídos**  
 Universidade Tecnológica Federal do Paraná (UTFPR)  
-Professor: [Rogerio Santos Pozza]  
+Professor: Rogerio Santos Pozza  
 Semestre: 2025/02
 
 ---
