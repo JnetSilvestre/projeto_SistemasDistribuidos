@@ -1,11 +1,11 @@
-# 🔥 Simulação de Difusão de Calor - Sistemas Distribuídos
+# Simulação de Difusão de Calor - Sistemas Distribuídos
 
 [![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![UTFPR](https://img.shields.io/badge/UTFPR-EC48A-red.svg)](http://www.utfpr.edu.br/)
 
 > Implementação e análise comparativa de algoritmos de difusão de calor em malhas 2D utilizando abordagens sequencial, paralela (threads) e distribuída (sockets).
 
-## 📋 Sumário
+## Sumário
 
 - [Sobre o Projeto](#sobre-o-projeto)
 - [Objetivos](#objetivos)
@@ -19,14 +19,15 @@
 - [Desafios e Soluções](#desafios-e-soluções)
 - [Equipe](#equipe)
 - [Referências](#referências)
+- [Relatórios e Apresentações](#relatórios-e-apresentações)
 
-## 🎯 Sobre o Projeto
+## Sobre o Projeto
 
 Este projeto foi desenvolvido como trabalho final da disciplina de **Sistemas Distribuídos (EC48A)** da UTFPR. O objetivo é implementar e comparar três diferentes abordagens computacionais para resolver o problema clássico de **difusão de calor** em uma malha bidimensional.
 
 A difusão de calor é um fenômeno físico que descreve como o calor se distribui ao longo do tempo em um meio, seguindo a equação diferencial de calor. A simulação computacional deste processo permite avaliar o comportamento de diferentes técnicas de processamento: sequencial, paralelo e distribuído.
 
-### 🔍 Problema Modelado
+### Problema Modelado
 
 A simulação utiliza uma malha 2D onde cada célula possui uma temperatura inicial. A difusão ocorre através da aplicação iterativa da equação discreta de calor, onde a temperatura de cada célula é atualizada com base na média ponderada das temperaturas das células vizinhas.
 
@@ -47,14 +48,15 @@ $$
 - **$\Delta t$** - Passo de tempo da simulação
 - **$T[i][j]_{\text{novo}}$** - Nova temperatura após um passo de tempo
 
-## 🎯 Objetivos
+## Objetivos
 
-- ✅ Implementar uma **solução sequencial** do problema de difusão de calor
-- ✅ Desenvolver uma **versão paralela** utilizando threads em Python
-- ✅ Criar uma **versão distribuída** utilizando comunicação por sockets
-- 📊 Comparar o desempenho das três abordagens em diferentes escalas
-- 📈 Analisar a escalabilidade e eficiência de cada implementação
-- 🔧 Identificar gargalos e propor melhorias
+- ☑ Implementar uma **solução sequencial** do problema de difusão de calor
+- ☑ Desenvolver uma **versão paralela** utilizando threads em Python
+- ☑ Criar uma **versão distribuída** utilizando comunicação por sockets
+- ☑ Comparar o desempenho das três abordagens em diferentes escalas
+- ☑ Analisar a escalabilidade e eficiência de cada implementação
+- ☑ Identificar gargalos e propor melhorias
+- ☑ Implementar uma **análise de desempenho automatizada** comparando todas as abordagens
 
 ## 📚 Fundamentação Teórica
 
@@ -82,7 +84,7 @@ A malha é dividida entre múltiplos processos ou máquinas que se comunicam via
 **Vantagens:** Escalabilidade para múltiplas máquinas, processamento massivo  
 **Desvantagens:** Latência de rede, complexidade de comunicação
 
-## 🏗️ Arquitetura
+## Esboço Arquitetura
 
 ┌─────────────────────────────────────────────────┐
 │ SIMULAÇÃO DE DIFUSÃO │
@@ -111,8 +113,9 @@ A malha é dividida entre múltiplos processos ou máquinas que se comunicam via
 5. **Sincronização** (paralelo/distribuído): Troca de dados entre threads/processos
 6. **Convergência**: Verificação de critério de parada
 7. **Visualização/Exportação**: Geração de resultados
+8. **Análise de Desempenho**: Execução automatizada de benchmarks
 
-## 🛠️ Tecnologias Utilizadas
+## Tecnologias Utilizadas
 
 - **Python 3.8+** - Linguagem de programação principal
 - **NumPy** - Operações matriciais e vetoriais eficientes
@@ -121,63 +124,69 @@ A malha é dividida entre múltiplos processos ou máquinas que se comunicam via
 - **Socket** - Biblioteca para comunicação distribuída
 - **Time/Timeit** - Medição de desempenho
 
-## 📁 Estrutura do Projeto
+## Estrutura do Projeto
 
+```bash
 projeto_SistemasDistribuidos/
 │
-├── README.md # Documentação do projeto
+├── README.md               # Documentação do projeto
 │
 ├── source/
 │   ├── sequencial/
-│   │   └── heat_diffusion_seq.py # Implementação sequencial
+│   │   └── heat_diffusion_sequential.py       # Implementação sequencial
 │   ├── paralelo/
-│   │   └── heat_diffusion_parallel.py # Implementação com threads
-│   └── distribuido/
-│       ├── heat_diffusion_master.py # Processo mestre (coordenador)
-│       └── heat_diffusion_worker.py # Processo worker (trabalhador)
+│   │   └── heat_diffusion_parallel.py  # Implementação com threads
+│   ├── distribuido/
+│   │   ├── heat_diffusion_distributed.py    # Processo mestre (coordenador) + worker
+│   │  
+│   └── performance/
+│       └── analyze_results.py     # Script de análise automática de desempenho
 │
-├── tests/
-│ ├── graphs/ # Gráficos de desempenho
-│ └── tables/ # Tabelas comparativas em json
-| 
+├── tests/        # Contém as simulações e resultados com alguns gráficos
 │
-└── reports/
-   └── apresentacao.pdf # Apresentação do trabalho
+├── reports/    # Relatórios finais e detalhes do projeto
+   ├── Relatório-Manual - Difusão de Calor - Grupo 11.pdf
+   └── Apresentação Grupo 11 - Guia.pdf
+```
 
 
-## 🚀 Como Executar
+## Como Executar
 
 ### Pré-requisitos
 
-Python 3.8 ou superior
+Instale o Python 3.8 ou superior:
+```bash
 python --version
-
-Instalar dependências
-pip install -r requirements.txt
-
+```
 
 ### Executando a Versão Sequencial
-cd sequencial
-python heat_diffusion_seq.py --size 1000 --iterations 1000
+```bash
+cd source/sequencial
+python heat_diffusion_sequential.py --size 1000 --iterations 1000
+```
 
 ### Executando a Versão Paralela
-cd paralelo
+```bash
+cd source/paralelo
 python heat_diffusion_parallel.py --size 1000 --iterations 1000 --threads 4
-
+```
 
 ### Executando a Versão Distribuída
-
 **Terminal 1 - Mestre:**
-cd distribuido
-python heat_diffusion_master.py --size 1000 --iterations 1000 --workers 3
+```bash
+cd source/distribuido
+python heat_diffusion_distributed.py --benchmark
+```
 
-**Terminais 2, 3, 4 - Workers:**
-cd distribuido
-python heat_diffusion_worker.py --host localhost --port 5000
-
+**Terminais 2, 3, 4, 5 - Workers:**
+```bash
+cd source/distribuido
+python heat_diffusion_distributed.py --worker --port 5000 #cada porta aumenta em +1 para cada trabalhador (5001, 5002...)
+```
+### Execução da Análise de Desempenho Automatizada
+Execute o script para comparar automaticamente todas as abordagens. Os resultados e gráficos serão salvos em tests.
 
 ### Parâmetros Disponíveis
-
 | Parâmetro | Descrição | Padrão |
 |-----------|-----------|--------|
 | `--size` | Tamanho da malha (NxN) | 500 |
@@ -187,8 +196,9 @@ python heat_diffusion_worker.py --host localhost --port 5000
 | `--alpha` | Coeficiente de difusão térmica | 0.1 |
 | `--dt` | Passo de tempo | 0.01 |
 | `--output` | Salvar visualização | False |
+| `--configs` | Caminho para arquivo de configurações de experimentos | configs/configs.json |
 
-## 📊 Análise de Desempenho
+## Análise de Desempenho
 
 ### Configuração de Hardware
 
@@ -218,7 +228,7 @@ Para garantir resultados consistentes e comparáveis:
 - 💾 **Uso de Memória**
 - 🌐 **Overhead de Comunicação** (distribuído)
 
-## 📈 Resultados
+## Resultados
 
 ### Comparação de Tempos de Execução
 
@@ -254,13 +264,13 @@ Speedup Distribuído (3 workers):
 
 ### Análise
 
-✅ **Versão Paralela** apresentou melhor desempenho em malhas médias/grandes  
-✅ **Eficiência** aumenta com o tamanho do problema  
-⚠️ **Versão Distribuída** sofre overhead de comunicação em malhas pequenas  
-⚠️ **Escalabilidade forte** limitada pela Lei de Amdahl  
-✅ **Escalabilidade fraca** demonstra potencial para problemas massivos
+☑ **Versão Paralela** apresentou melhor desempenho em malhas médias/grandes  
+☑ **Eficiência** aumenta com o tamanho do problema  
+☑ **Versão Distribuída** sofre overhead de comunicação em malhas pequenas  
+☑ **Escalabilidade forte** limitada pela Lei de Amdahl  
+☑ **Escalabilidade fraca** demonstra potencial para problemas massivos
 
-## 🔧 Desafios e Soluções
+## Desafios e Soluções 
 
 ### Desafio 1: Sincronização de Threads
 **Problema:** Race conditions ao atualizar células de fronteira  
@@ -278,9 +288,9 @@ Speedup Distribuído (3 workers):
 **Problema:** Instabilidade numérica com passos de tempo grandes  
 **Solução:** Aplicação da condição CFL (Courant-Friedrichs-Lewy)
 
-## 👥 Equipe
+## Equipe Envolvida
 
-Este projeto foi desenvolvido por alunos de Engenharia da Computação da UTFPR - Campus Curitiba.
+Este projeto foi desenvolvido por alunos de Engenharia da Computação da UTFPR - Campus Cornélio Procópio.
 
 | Nome | Contribuição |
 |------|--------------|
@@ -288,7 +298,13 @@ Este projeto foi desenvolvido por alunos de Engenharia da Computação da UTFPR 
 | **[João Victor da Cruz Silvestre]** | Implementação distribuída, testes e documentação |
 | **[Filipe Santos]** | Visualização, benchmarks e apresentação |
 
-## 📚 Algumas Referências
+## 📂 Relatórios e Apresentações
+
+Os documentos finais do projeto ficarão disponíveis na pasta `reportPDF/`. Os arquivos previstos são:
+- **Relatório-Manual - Difusão de Calor - Grupo 11.pdf**
+- **Apresentação Grupo 11 - Guia.pdf**
+
+## Algumas Referências
 
 1. **Smith, G. D.** (1985). *Numerical Solution of Partial Differential Equations: Finite Difference Methods*. Oxford University Press.
 
@@ -304,7 +320,7 @@ Este projeto foi desenvolvido por alunos de Engenharia da Computação da UTFPR 
 
 ---
 
-## 🎓 Disciplina
+## Disciplina
 
 **EC48A - Sistemas Distribuídos**  
 Universidade Tecnológica Federal do Paraná (UTFPR)  
