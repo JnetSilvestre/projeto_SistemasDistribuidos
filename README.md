@@ -58,7 +58,7 @@ $$
 - ☑ Identificar gargalos e propor melhorias
 - ☑ Implementar uma **análise de desempenho automatizada** comparando todas as abordagens
 
-## 📚 Fundamentação Teórica
+## Fundamentação Teórica
 
 ### Difusão de Calor
 
@@ -144,7 +144,7 @@ projeto_SistemasDistribuidos/
 │
 ├── tests/        # Contém as simulações e resultados com alguns gráficos
 │
-├── reports/    # Relatórios finais e detalhes do projeto
+├── reportPDF/    # Relatórios finais e detalhes do projeto
    ├── Relatório-Manual - Difusão de Calor - Grupo 11.pdf
    └── Apresentação Grupo 11 - Guia.pdf
 ```
@@ -232,35 +232,29 @@ Para garantir resultados consistentes e comparáveis:
 
 ### Comparação de Tempos de Execução
 
-| Malha | Iterações | Sequencial | Paralelo (4 threads) | Distribuído (3 workers) |
+| Malha | Iterações | Sequencial | Paralelo (4 threads) | Distribuído (4 workers) |
 |-------|-----------|------------|----------------------|-------------------------|
-| 100x100 | 500 | 0.45s | 0.18s | 0.35s |
-| 500x500 | 1000 | 12.3s | 3.7s | 5.2s |
-| 1000x1000 | 1000 | 48.6s | 13.2s | 16.8s |
-| 2000x2000 | 2000 | 385.4s | 98.5s | 112.3s |
+| 20x20 | 5000 | 0.50s | 11.85s | 0.74s |
+| 50x50 | 5000 | 10.06s | 64.09s | 8.68s |
+| 100x100 | 5000 | 109.03s | 335.28s | 44.80s |
 
 ### Speedup Observado
 
 Speedup Paralelo (4 threads):
 
-100x100: 2.5x
+20x20: 0.76x
 
-500x500: 3.3x
+50x50: 0.91x
 
-1000x1000: 3.7x
+100x100: 0.77x
 
-2000x2000: 3.9x
+Speedup Distribuído (4 workers):
 
-Speedup Distribuído (3 workers):
+20x20: 1.24x
 
-100x100: 1.3x
+50x50: 2.69x
 
-500x500: 2.4x
-
-1000x1000: 2.9x
-
-2000x2000: 3.4x
-
+100x100: 2.83x
 
 ### Análise
 
@@ -294,15 +288,16 @@ Este projeto foi desenvolvido por alunos de Engenharia da Computação da UTFPR 
 
 | Nome | Contribuição |
 |------|--------------|
-| **[Matheus Consoni Mazantti]** | Implementação sequencial e paralela, análise de desempenho |
-| **[João Victor da Cruz Silvestre]** | Implementação distribuída, testes e documentação |
-| **[Filipe Santos]** | Visualização, benchmarks e apresentação |
+| **Matheus Consoni Mazantti** | Implementação sequencial e paralela, análise de desempenho |
+| **João Victor da Cruz Silvestre** | Implementação distribuída, testes e documentação |
+| **Filipe Santos** | Visualização, benchmarks e apresentação |
 
 ## 📂 Relatórios e Apresentações
 
 Os documentos finais do projeto ficarão disponíveis na pasta `reportPDF/`. Os arquivos previstos são:
 - **Relatório-Manual - Difusão de Calor - Grupo 11.pdf**
 - **Apresentação Grupo 11 - Guia.pdf**
+- **O vídeo de apresentação foi enviado direto ao professor**
 
 ## Algumas Referências
 
